@@ -63,17 +63,23 @@ function getPeople(baseUrl, zip, chamber, cb) {
       ret.push(dc.paulRyanObj);
     }
 
-    const callees = ret.map((personObj) => {
-      // Map API response to generic callee model.
-      return new Callee(personObj.first_name, personObj.last_name,
-                        personObj.phone, chamber);
-                        //personObj.offices[0].phone, personObj.chamber);
-    });
+    if (ret) {
+      const callees = ret.map((personObj) => {
+        // Map API response to generic callee model.
+        return new Callee(personObj.first_name, personObj.last_name,
+                          personObj.phone, chamber);
+                          //personObj.offices[0].phone, personObj.chamber);
+      });
 
-    if (callees.length > 0) {
-      cachedZipLookups[cacheKey] = callees;
+      if (callees.length > 0) {
+        cachedZipLookups[cacheKey] = callees;
+      }
+      cb(callees);
     }
-    cb(callees);
+    else {
+      const callees = new Array();
+      cb(callees);
+    }
   });
 }
 

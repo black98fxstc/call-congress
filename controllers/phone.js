@@ -19,6 +19,7 @@ function switchboard(req, res) {
   }, function() {
     // Dial 1 for this, dial 2 for that...
     this.play(config.audio.switchboard.introAudio);
+    // this.say(config.audio.switchboard.introText);
   });
   call.redirect('error_redirect/switchboard')
 
@@ -72,8 +73,24 @@ function newCall(req, res) {
 
 function callStateLegislators(req, res) {
   const zip = req.body.Digits;
-  console.log('Call State', zip);
-  states.getPeople(zip, (people) => {
+  console.log('Call State Legislators', zip);
+  states.getPeople(zip, 'both', (people) => {
+    callPeople(people, zip, res);
+  });
+}
+
+function callStateUpperHouse(req, res) {
+  const zip = req.body.Digits;
+  console.log('Call State Upper House', zip);
+  states.getPeople(zip, 'upper', (people) => {
+    callPeople(people, zip, res);
+  });
+}
+
+function callStateLowerHouse(req, res) {
+  const zip = req.body.Digits;
+  console.log('Call State Lower House', zip);
+  states.getPeople(zip, 'lower', (people) => {
     callPeople(people, zip, res);
   });
 }
@@ -118,7 +135,11 @@ function callPeople(people, zip, res) {
       }
 
       const phone = person.getPhone();
-      if (person.getChamber() === 'senate') {
+      if (person.getChamber() == 'upper') {
+        call.play(config.audio.stateUpperTitle);
+      } else if (person.getChamber() == 'lower') {
+        call.play(config.audio.stateLowerTitle);
+      } else if (person.getChamber() === 'senate') {
         call.play(config.audio.senator);
       } else {
         call.play(config.audio.representative);
@@ -148,11 +169,15 @@ module.exports = {
   newCallTestGet: getWrapper.bind(this, newCall),
 
   callStateLegislators: callStateLegislators,
+  callStateUpperHouse: callStateUpperHouse,
+  callStateLowerHouse: callStateLowerHouse,
   callSenate: callSenate,
   callHouse: callHouse,
   callHouseAndSenate: callHouseAndSenate,
 
   callStateLegislatorsTestGet: getWrapper.bind(this, callStateLegislators),
+  callStateUpperHouseTestGet: getWrapper.bind(this, callStateUpperHouse),
+  callStateLowerHouseTestGet: getWrapper.bind(this, callStateLowerHouse),
   callSenateTestGet: getWrapper.bind(this, callSenate),
   callHouseTestGet: getWrapper.bind(this, callHouse),
   callHouseAndSenateTestGet: getWrapper.bind(this, callHouseAndSenate),

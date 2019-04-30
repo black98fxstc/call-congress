@@ -41,6 +41,10 @@ app.get('/new_phone_call', phoneController.newCallTestGet);
 
 app.post('/call_state_legislators', phoneController.callStateLegislators);
 app.get('/call_state_legislators', phoneController.callStateLegislatorsTestGet);
+app.post('/call_state_upper_house', phoneController.callStateUpperHouse);
+app.get('/call_state_upper_house', phoneController.callStateUpperHouseTestGet);
+app.post('/call_state_lower_house', phoneController.callStateLowerHouse);
+app.get('/call_state_lower_house', phoneController.callStateLowerHouseTestGet);
 app.post('/call_house', phoneController.callHouse);
 app.get('/call_house', phoneController.callHouseTestGet);
 app.post('/call_senate', phoneController.callSenate);
