@@ -28,6 +28,9 @@ module.exports = {
       pleaseEnterZip: 'audio/general/enter_your_zip.mp3',
       errorEncountered: 'audio/v2/error.mp3',
       aboutToStart: 'audio/statestrong/about_to_start.mp3',
+      stateUpperStart: 'audio/statestrong/upper_start.mp3',
+      stateLowerStart: 'audio/statestrong/lower_start.mp3',
+      stateBothStart: 'audio/statestrong/about_to_start.mp3',
       nextCallBeginning: 'audio/statestrong/next_call.mp3',
       done: 'audio/statestrong/finished.mp3',
       

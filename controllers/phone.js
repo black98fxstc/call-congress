@@ -19,7 +19,6 @@ function switchboard(req, res) {
   }, function() {
     // Dial 1 for this, dial 2 for that...
     this.play(config.audio.switchboard.introAudio);
-    // this.say(config.audio.switchboard.introText);
   });
   call.redirect('error_redirect/switchboard')
 
@@ -75,7 +74,7 @@ function callStateLegislators(req, res) {
   const zip = req.body.Digits;
   console.log('Call State Legislators', zip);
   states.getPeople(zip, 'both', (people) => {
-    callPeople(people, zip, res);
+    callPeople(people, zip, 'both', res);
   });
 }
 
@@ -83,7 +82,7 @@ function callStateUpperHouse(req, res) {
   const zip = req.body.Digits;
   console.log('Call State Upper House', zip);
   states.getPeople(zip, 'upper', (people) => {
-    callPeople(people, zip, res);
+    callPeople(people, zip, 'upper', res);
   });
 }
 
@@ -91,7 +90,7 @@ function callStateLowerHouse(req, res) {
   const zip = req.body.Digits;
   console.log('Call State Lower House', zip);
   states.getPeople(zip, 'lower', (people) => {
-    callPeople(people, zip, res);
+    callPeople(people, zip, 'lower', res);
   });
 }
 
@@ -99,7 +98,7 @@ function callSenate(req, res) {
   const zip = req.body.Digits;
   console.log('Call Senate', zip);
   congress.getSenators(zip, (people) => {
-    callPeople(people, zip, res);
+    callPeople(people, zip, 'senate', res);
   });
 }
 
@@ -107,7 +106,7 @@ function callHouse(req, res) {
   const zip = req.body.Digits;
   console.log('Call House', zip);
   congress.getHouseReps(zip, (people) => {
-    callPeople(people, zip, res);
+    callPeople(people, zip, 'house', res);
   });
 }
 
@@ -115,11 +114,11 @@ function callHouseAndSenate(req, res) {
   const zip = req.body.Digits;
   console.log('Call House and Senate', zip);
   congress.getSenatorsAndHouseReps(zip, (people) => {
-    callPeople(people, zip, res);
+    callPeople(people, zip, 'congress', res);
   });
 }
 
-function callPeople(people, zip, res) {
+function callPeople(people, zip, chamber, res) {
   console.log('Calling people', people.length);
 
   // Construct Twilio response.
@@ -128,7 +127,21 @@ function callPeople(people, zip, res) {
     console.error('Got 0 people for zip code', zip);
     call.redirect('error_redirect/switchboard');
   } else {
-    call.play(config.audio.aboutToStart);
+    if (chamber == 'both')
+      call.play(config.audio.aboutToStart);
+  	// switch (chamber) {
+  	// case 'upper':
+    //   call.play(config.audio.stateUpperStart);
+    //   break;
+  	// case 'lower':
+    //   call.play(config.audio.stateLowerStart);
+    //   break;
+  	// case 'both':
+    //   call.play(config.audio.stateBothStart);
+    //   break;
+  	// default:
+    //   call.play(config.audio.aboutToStart);
+  	// };
     people.sort(config.target.sortFn).forEach((person, idx) => {
       if (idx > 0) {
         call.play(config.audio.nextCallBeginning);
