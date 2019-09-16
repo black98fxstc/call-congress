@@ -128,7 +128,19 @@ function callPeople(people, zip, chamber, res) {
     call.say({ voice: 'woman' }, "Nothing found for zip code ");
     call.say({ voice: 'woman' }, zip[0] + ' ' + zip[1] + ' ' + zip[2] + ' ' + zip[3] + ' ' + zip[4]);
     call.say({ voice: 'woman' }, "Please try again");
-//    call.redirect('error_redirect/switchboard');
+		 switch (chamber) {
+		 case 'upper':
+			 call.redirect('call_state_upper_house');
+		   break;
+		 case 'lower':
+			 call.redirect('call_state_lower_house');
+		   break;
+		 case 'both':
+			 call.redirect('call_state_legislators');
+		   break;
+		 default:
+		   call.redirect('error_redirect/switchboard');
+		 };
   } else {
     if (chamber == 'both')
       call.play(config.audio.aboutToStart);
