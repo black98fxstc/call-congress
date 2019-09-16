@@ -19,7 +19,13 @@ function getPeople(zip, chamber, cb) {
 	      return;
 	    }
 	
-	    const ret = JSON.parse(body).data.results;
+	    let ret = JSON.parse(body);
+	    if (ret != null) {
+		    ret = ret.data;
+	    }
+	    if (ret != null) {
+		    ret = ret.results;
+	    }
 	    if (!ret) {
 	      console.error('Error looking up zip code 2', zip, err);
 	      cb([]);

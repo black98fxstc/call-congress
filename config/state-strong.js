@@ -2,7 +2,7 @@
 // 1-844-USA-0234.
 
 module.exports = {
-//    debug: true,
+    debug: true,
     audio: {
       switchboard: {
         introAudio: 'audio/statestrong/introduction.mp3',

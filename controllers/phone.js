@@ -125,6 +125,7 @@ function callPeople(people, zip, chamber, res) {
   const call = new twilio.TwimlResponse();
   if (!people || people.length < 1) {
     console.error('Got 0 people for zip code', zip);
+    call.say({ voice: 'woman' }, "Nothing found for that zip code. Please try again");
     call.redirect('error_redirect/switchboard');
   } else {
     if (chamber == 'both')
