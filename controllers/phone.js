@@ -74,7 +74,7 @@ function callStateLegislators(req, res) {
   const zip = req.body.Digits;
   console.log('Call State Legislators', zip);
   states.getPeople(zip, 'both', (people) => {
-    callPeople(people, zip, 'both', req, res);
+    callPeople(people, zip, 'both', res);
   });
 }
 
@@ -82,7 +82,7 @@ function callStateUpperHouse(req, res) {
   const zip = req.body.Digits;
   console.log('Call State Upper House', zip);
   states.getPeople(zip, 'upper', (people) => {
-    callPeople(people, zip, 'upper', req, res);
+    callPeople(people, zip, 'upper', res);
   });
 }
 
@@ -90,7 +90,7 @@ function callStateLowerHouse(req, res) {
   const zip = req.body.Digits;
   console.log('Call State Lower House', zip);
   states.getPeople(zip, 'lower', (people) => {
-    callPeople(people, zip, 'lower', req, res);
+    callPeople(people, zip, 'lower', res);
   });
 }
 
@@ -98,7 +98,7 @@ function callSenate(req, res) {
   const zip = req.body.Digits;
   console.log('Call Senate', zip);
   congress.getSenators(zip, (people) => {
-    callPeople(people, zip, 'senate', req, res);
+    callPeople(people, zip, 'senate', res);
   });
 }
 
@@ -106,7 +106,7 @@ function callHouse(req, res) {
   const zip = req.body.Digits;
   console.log('Call House', zip);
   congress.getHouseReps(zip, (people) => {
-    callPeople(people, zip, 'house', req, res);
+    callPeople(people, zip, 'house', res);
   });
 }
 
@@ -114,19 +114,19 @@ function callHouseAndSenate(req, res) {
   const zip = req.body.Digits;
   console.log('Call House and Senate', zip);
   congress.getSenatorsAndHouseReps(zip, (people) => {
-    callPeople(people, zip, 'congress', req, res);
+    callPeople(people, zip, 'congress', res);
   });
 }
 
-function callPeople(people, zip, chamber, req, res) {
+function callPeople(people, zip, chamber, res) {
   console.log('Calling people', people.length);
 
   // Construct Twilio response.
   const call = new twilio.TwimlResponse();
   if (!people || people.length < 1) {
     console.error('Got 0 people for zip code', zip);
-    call.say({ voice: 'woman' }, "Nothing found for zip code");
-    call.say({ voice: 'woman' }, req.body.digits);
+    call.say({ voice: 'woman' }, "Nothing found for zip code ");
+    call.say({ voice: 'woman' }, zip);
     call.say({ voice: 'woman' }, "Please try again");
 //    call.redirect('error_redirect/switchboard');
   } else {
