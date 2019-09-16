@@ -74,7 +74,7 @@ function callStateLegislators(req, res) {
   const zip = req.body.Digits;
   console.log('Call State Legislators', zip);
   states.getPeople(zip, 'both', (people) => {
-    callPeople(people, zip, 'both', res);
+    callPeople(people, zip, 'both', req, res);
   });
 }
 
@@ -82,7 +82,7 @@ function callStateUpperHouse(req, res) {
   const zip = req.body.Digits;
   console.log('Call State Upper House', zip);
   states.getPeople(zip, 'upper', (people) => {
-    callPeople(people, zip, 'upper', res);
+    callPeople(people, zip, 'upper', req, res);
   });
 }
 
@@ -90,7 +90,7 @@ function callStateLowerHouse(req, res) {
   const zip = req.body.Digits;
   console.log('Call State Lower House', zip);
   states.getPeople(zip, 'lower', (people) => {
-    callPeople(people, zip, 'lower', res);
+    callPeople(people, zip, 'lower', req, res);
   });
 }
 
@@ -98,7 +98,7 @@ function callSenate(req, res) {
   const zip = req.body.Digits;
   console.log('Call Senate', zip);
   congress.getSenators(zip, (people) => {
-    callPeople(people, zip, 'senate', res);
+    callPeople(people, zip, 'senate', req, res);
   });
 }
 
@@ -106,7 +106,7 @@ function callHouse(req, res) {
   const zip = req.body.Digits;
   console.log('Call House', zip);
   congress.getHouseReps(zip, (people) => {
-    callPeople(people, zip, 'house', res);
+    callPeople(people, zip, 'house', req, res);
   });
 }
 
@@ -114,19 +114,21 @@ function callHouseAndSenate(req, res) {
   const zip = req.body.Digits;
   console.log('Call House and Senate', zip);
   congress.getSenatorsAndHouseReps(zip, (people) => {
-    callPeople(people, zip, 'congress', res);
+    callPeople(people, zip, 'congress', req, res);
   });
 }
 
-function callPeople(people, zip, chamber, res) {
+function callPeople(people, zip, chamber, req, res) {
   console.log('Calling people', people.length);
 
   // Construct Twilio response.
   const call = new twilio.TwimlResponse();
   if (!people || people.length < 1) {
     console.error('Got 0 people for zip code', zip);
-    call.say({ voice: 'woman' }, "Nothing found for that zip code. Please try again");
-    call.redirect('error_redirect/switchboard');
+    call.say({ voice: 'woman' }, "Nothing found for zip code");
+    call.say({ voice: 'woman' }, req.digits);
+    call.say({ voice: 'woman' }, "Please try again");
+//    call.redirect('error_redirect/switchboard');
   } else {
     if (chamber == 'both')
       call.play(config.audio.aboutToStart);
