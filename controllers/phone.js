@@ -126,7 +126,7 @@ function callPeople(people, zip, chamber, req, res) {
   if (!people || people.length < 1) {
     console.error('Got 0 people for zip code', zip);
     call.say({ voice: 'woman' }, "Nothing found for zip code");
-    call.say({ voice: 'woman' }, req.digits);
+    call.say({ voice: 'woman' }, req.body.digits);
     call.say({ voice: 'woman' }, "Please try again");
 //    call.redirect('error_redirect/switchboard');
   } else {
